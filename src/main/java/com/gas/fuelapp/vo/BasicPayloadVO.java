@@ -7,9 +7,9 @@ import lombok.Data;
 public class BasicPayloadVO {
 
     @JsonProperty("Year")
-    private int year;
+    private Integer year;
 
-    @JsonProperty("Drive Id")
+    @JsonProperty("Driver Id")
     private String driverId;
 
 }

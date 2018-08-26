@@ -9,15 +9,15 @@ import java.io.Serializable;
 public class SpecifiedFuelConsumeByMonthAndYearPayloadVO implements Serializable {
 
     @JsonProperty("Month")
-    private int month;
+    private Integer month;
 
     @JsonProperty("Year")
-    private int year;
+    private Integer year;
 
-    @JsonProperty("Drive Id")
+    @JsonProperty("Driver Id")
     private String driverId;
 
-    SpecifiedFuelConsumeByMonthAndYearPayloadVO(int month, int year, String driverId) {
+    SpecifiedFuelConsumeByMonthAndYearPayloadVO(Integer month, Integer year, String driverId) {
         this.month = month;
         this.year = year;
         this.driverId = driverId;

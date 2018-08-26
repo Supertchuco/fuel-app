@@ -19,7 +19,7 @@ public class FuelConsumptionVO implements Serializable {
     private String driveId;
 
     @JsonProperty("Volume")
-    private double litters;
+    private BigDecimal litters;
 
     @JsonProperty("Price Per Litter")
     private BigDecimal pricePerLitter;
@@ -30,7 +30,7 @@ public class FuelConsumptionVO implements Serializable {
             pattern = "MM-dd-yyyy")
     private Date transactionDate;
 
-    public FuelConsumptionVO(String fuelType, String driveId, double litters, BigDecimal pricePerLitter, Date transactionDate) {
+    public FuelConsumptionVO(String fuelType, String driveId, BigDecimal litters, BigDecimal pricePerLitter, Date transactionDate) {
         this.fuelType = fuelType;
         this.driveId = driveId;
         this.litters = litters;

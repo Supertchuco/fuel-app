@@ -1,6 +1,7 @@
 package com.gas.fuelapp.repository;
 
 import com.gas.fuelapp.entity.FuelConsumption;
+import com.gas.fuelapp.vo.FuelStatisticReportVO;
 import com.gas.fuelapp.vo.MonthlyReportVO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -19,8 +20,6 @@ public interface FuelConsumptionRepository extends CrudRepository<FuelConsumptio
     @Query("SELECT DISTINCT YEAR(transactionDate) FROM FuelConsumption")
     Collection<Date> findAllYearsOnDatabase();
 
-
-
     @Query("SELECT new com.gas.fuelapp.vo.MonthlyReportVO(MONTH(fuelConsumption.transactionDate), YEAR(fuelConsumption.transactionDate), SUM(fuelConsumption.litters), SUM(fuelConsumption.totalValueSpend)) FROM FuelConsumption fuelConsumption GROUP BY MONTH(fuelConsumption.transactionDate), YEAR(fuelConsumption.transactionDate)")
     Collection<MonthlyReportVO> getMonthlyReportAllYears();
 
@@ -30,12 +29,10 @@ public interface FuelConsumptionRepository extends CrudRepository<FuelConsumptio
     @Query("SELECT new com.gas.fuelapp.vo.MonthlyReportVO(MONTH(fuelConsumption.transactionDate), YEAR(fuelConsumption.transactionDate), SUM(fuelConsumption.litters), SUM(fuelConsumption.totalValueSpend)) FROM FuelConsumption fuelConsumption WHERE fuelConsumption.transactionDate BETWEEN :startDate AND :endDate GROUP BY MONTH(fuelConsumption.transactionDate), YEAR(fuelConsumption.transactionDate)")
     Collection<MonthlyReportVO> getMonthlyReportTimeInterval(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT fuelConsumption FROM FuelConsumption fuelConsumption WHERE YEAR(fuelConsumption.transactionDate)=:yearParam AND MONTH(fuelConsumption.transactionDate)=:monthParam GROUP BY MONTH(fuelConsumption.transactionDate), YEAR(fuelConsumption.transactionDate)")
-    Collection<FuelConsumption> getFuelConsumptionReportByMonthAndYear(@Param("monthParam") int monthParam, @Param("yearParam") int yearParam);
+    @Query("SELECT fuelConsumption FROM FuelConsumption fuelConsumption WHERE YEAR(fuelConsumption.transactionDate)=:yearParam AND MONTH(fuelConsumption.transactionDate)=:monthParam")
+    Collection<FuelConsumption> getFuelConsumptionReportByMonthAndYear(@Param("yearParam") int yearParam, @Param("monthParam") int monthParam);
 
-    @Transactional
-    void deleteByTransactionId(int transactionId);
-
-
+    @Query("SELECT new com.gas.fuelapp.vo.FuelStatisticReportVO(fuelConsumption.fuelType, SUM(fuelConsumption.litters), AVG(fuelConsumption.pricePerLitter), MONTH( fuelConsumption.transactionDate), YEAR(fuelConsumption.transactionDate)) FROM FuelConsumption fuelConsumption WHERE YEAR(fuelConsumption.transactionDate)=:yearParam GROUP BY MONTH(fuelConsumption.transactionDate), YEAR(fuelConsumption.transactionDate), fuelConsumption.fuelType ORDER BY MONTH(fuelConsumption.transactionDate)")
+    Collection<FuelStatisticReportVO> getMonthlyFuelConsumptionReportStatisticsByYear(@Param("yearParam") int yearParam);
 
 }

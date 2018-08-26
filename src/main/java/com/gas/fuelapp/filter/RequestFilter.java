@@ -10,12 +10,19 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.gas.fuelapp.service.DriverService;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class RequestFilter implements Filter {
+
+
+    @Autowired
+    DriverService driverService;
 
     public void destroy() {
         // Nothing to do
@@ -28,11 +35,19 @@ public class RequestFilter implements Filter {
         String body = IOUtils.toString(wrappedRequest.getReader());
 
         System.out.println(body);
-
+        validateDriverAccess(body);
 
         wrappedRequest.resetInputStream();
         chain.doFilter(wrappedRequest, response);
 
+    }
+
+    private void validateDriverAccess(String bodyRequest){
+        JSONObject jsonObj = new JSONObject(bodyRequest);
+        String driverId = jsonObj.getString("Driver Id");
+        if(!driverService.existDriverIdOnDatabase(driverId)){
+            System.out.println("não existe");
+        }
     }
 
     public void init(FilterConfig arg0) throws ServletException {

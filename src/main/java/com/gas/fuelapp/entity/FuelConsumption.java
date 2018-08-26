@@ -27,7 +27,7 @@ public class FuelConsumption implements Serializable {
 
     @Column
     @JsonProperty("Volume")
-    private double litters;
+    private BigDecimal litters;
 
     @Column
     @JsonProperty("Date")
@@ -49,17 +49,17 @@ public class FuelConsumption implements Serializable {
     @JsonProperty("Total Value Spend")
     private BigDecimal totalValueSpend;
 
-    public FuelConsumption(String fuelType, double litters, Date transactionDate, String driveId, BigDecimal pricePerLitter) {
+    public FuelConsumption(String fuelType, BigDecimal litters, Date transactionDate, String driveId, BigDecimal pricePerLitter) {
         this.fuelType = fuelType;
-        this.litters = litters;
+        this.litters = litters.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         this.transactionDate = transactionDate;
         this.driveId = driveId;
-        this.pricePerLitter = pricePerLitter;
+        this.pricePerLitter = pricePerLitter.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         this.totalValueSpend = calculateTotalValueSpend();
     }
 
     private BigDecimal calculateTotalValueSpend() {
-        return pricePerLitter.multiply(new BigDecimal(litters));
+        return pricePerLitter.multiply(litters).setScale(2, BigDecimal.ROUND_HALF_EVEN);
     }
 
 }

@@ -19,5 +19,5 @@ public class TotalSpentAmountValueGroupedByMonthReportVO implements Serializable
     private BigDecimal totalValueSpend;
 
     @JsonProperty("Year selected")
-    private int year;
+    private Integer year;
 }

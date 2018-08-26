@@ -12,13 +12,13 @@ import java.math.BigDecimal;
 public class MonthlyReportVO implements Serializable {
 
     @JsonProperty("Month")
-    private int month;
+    private Integer month;
 
     @JsonProperty("Year")
-    private int year;
+    private Integer year;
 
     @JsonProperty("Volume")
-    private double litters;
+    private BigDecimal litters;
 
     @JsonProperty("Spend Value")
     private BigDecimal spendValue;

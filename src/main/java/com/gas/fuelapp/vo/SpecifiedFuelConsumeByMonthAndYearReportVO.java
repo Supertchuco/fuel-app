@@ -20,9 +20,13 @@ public class SpecifiedFuelConsumeByMonthAndYearReportVO implements Serializable 
     private String monthYear;
 
     @JsonProperty("Total Volume")
-    private double litters;
+    private BigDecimal litters;
 
     @JsonProperty("Total Price")
     private BigDecimal spendValue;
+
+    public SpecifiedFuelConsumeByMonthAndYearReportVO(String monthYear){
+        this.monthYear = monthYear;
+    }
 
 }
