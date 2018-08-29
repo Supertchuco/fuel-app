@@ -1,7 +1,6 @@
 package com.gas.fuelapp.controller;
 
-import com.gas.fuelapp.exception.InvalidAccessException;
-import com.gas.fuelapp.exception.SaveFuelConsumptionException;
+import com.gas.fuelapp.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,14 +24,28 @@ public class ExceptionResourceHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ExceptionResponse> handleSaveFuelConsumptionException(SaveFuelConsumptionException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                 request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(InvalidAccessException.class)
-    public final ResponseEntity<Object> handleInvalidAccessException(InvalidAccessException ex, WebRequest request) {
+    @ExceptionHandler(GenerateReportException.class)
+    public final ResponseEntity<Object> handleGenerateReportException(GenerateReportException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                 request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadRequestSaveFuelConsumptionException.class)
+    public final ResponseEntity<Object> handleBadRequestSaveFuelConsumptionException(BadRequestSaveFuelConsumptionException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicateFuelConsumptionException.class)
+    public final ResponseEntity<Object> handleDuplicateFuelConsumptionException(DuplicateFuelConsumptionException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

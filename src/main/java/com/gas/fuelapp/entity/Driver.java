@@ -2,6 +2,7 @@ package com.gas.fuelapp.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Table;
 @Entity(name = "Driver")
 @Table(name = "Driver")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Driver {
 
     @Id

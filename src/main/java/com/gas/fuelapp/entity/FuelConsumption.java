@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -60,6 +61,16 @@ public class FuelConsumption implements Serializable {
 
     private BigDecimal calculateTotalValueSpend() {
         return pricePerLitter.multiply(litters).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+    }
+
+    public boolean existNullField() throws IllegalAccessException {
+        for (Field f : getClass().getDeclaredFields()){
+            if (f.get(this) == null){
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

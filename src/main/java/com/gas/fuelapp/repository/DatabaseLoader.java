@@ -1,5 +1,6 @@
 package com.gas.fuelapp.repository;
 
+import com.gas.fuelapp.entity.Driver;
 import com.gas.fuelapp.entity.FuelConsumption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,16 +15,20 @@ import java.util.GregorianCalendar;
 public class DatabaseLoader implements CommandLineRunner {
 
     private final FuelConsumptionRepository fuelConsumptionRepository;
+    private final DriverRepository driverRepository;
 
     @Autowired
-    public DatabaseLoader(FuelConsumptionRepository fuelConsumptionRepo) {
+    public DatabaseLoader(FuelConsumptionRepository fuelConsumptionRepo, DriverRepository driverRepo) {
         this.fuelConsumptionRepository = fuelConsumptionRepo;
+        this.driverRepository = driverRepo;
     }
 
     @Override
     public void run(String... strings) {
 
-        this.fuelConsumptionRepository.save(new FuelConsumption("Gasolina".toUpperCase(), new BigDecimal(54.5), new Date(), "firstDriveId", new BigDecimal(1.30)));
+        this.driverRepository.save(new Driver("firstDriverId"));
+
+        this.fuelConsumptionRepository.save(new FuelConsumption("Gasolina".toUpperCase(), new BigDecimal(54.5), new Date(), "firstDriverId", new BigDecimal(1.30)));
 
         this.fuelConsumptionRepository.save(new FuelConsumption("Gasolina".toUpperCase(), new BigDecimal(50), new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(), "SecondDriveId", new BigDecimal(2.50)));
 

@@ -1,17 +1,15 @@
 package com.gas.fuelapp.controller;
 
-import com.gas.fuelapp.entity.Driver;
-import com.gas.fuelapp.entity.FuelConsumption;
 import com.gas.fuelapp.service.DriverService;
 import com.gas.fuelapp.service.FuelService;
 import com.gas.fuelapp.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
-import java.util.Date;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/fuelConsumption")
@@ -23,25 +21,12 @@ public class FuelConsumptionController {
     @Autowired
     DriverService driverService;
 
-    @RequestMapping(value = "/findAll", method = RequestMethod.GET)
-    public @ResponseBody
-    Collection<FuelConsumption> findAll() {
-        return fuelService.findAll();
-    }
-
-    @RequestMapping(value = "/findAllYears", method = RequestMethod.GET)
-    public @ResponseBody
-    Collection<Date> findAllYears() {
-        return fuelService.findAllExistentYearsOnDb();
-    }
-
     @RequestMapping(value = "/saveFuelConsumptions", method = RequestMethod.POST)
-    @ResponseBody
     @Transactional
     public ResponseEntity<Object> saveFuelConsumptions(@RequestBody SaveFuelConsumptionPayloadVO payload) {
         fuelService.saveFuelConsumptions(payload);
         driverService.saveDriver(payload);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("Save Fuel Consumption(s) with success");
     }
 
     @RequestMapping(value = "/consumeByMonthAndYear", method = RequestMethod.POST)

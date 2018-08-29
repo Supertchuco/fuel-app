@@ -6,11 +6,13 @@ import com.gas.fuelapp.vo.MonthlyReportVO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
+@Repository
 public interface FuelConsumptionRepository extends CrudRepository<FuelConsumption, Long> {
 
     Collection<FuelConsumption> findByFuelType(String fuelName);
@@ -34,5 +36,8 @@ public interface FuelConsumptionRepository extends CrudRepository<FuelConsumptio
 
     @Query("SELECT new com.gas.fuelapp.vo.FuelStatisticReportVO(fuelConsumption.fuelType, SUM(fuelConsumption.litters), AVG(fuelConsumption.pricePerLitter), MONTH( fuelConsumption.transactionDate), YEAR(fuelConsumption.transactionDate)) FROM FuelConsumption fuelConsumption WHERE YEAR(fuelConsumption.transactionDate)=:yearParam GROUP BY MONTH(fuelConsumption.transactionDate), YEAR(fuelConsumption.transactionDate), fuelConsumption.fuelType ORDER BY MONTH(fuelConsumption.transactionDate)")
     Collection<FuelStatisticReportVO> getMonthlyFuelConsumptionReportStatisticsByYear(@Param("yearParam") int yearParam);
+
+    @Query("SELECT fuelConsumption FROM FuelConsumption fuelConsumption WHERE fuelConsumption.fuelType = :fuelTypeParam AND fuelConsumption.litters = :littersParam AND  MONTH(fuelConsumption.transactionDate) = MONTH(:transactionDateParam) AND YEAR(fuelConsumption.transactionDate) = YEAR(:transactionDateParam) AND DAY(fuelConsumption.transactionDate) = DAY(:transactionDateParam) AND fuelConsumption.pricePerLitter = :pricePerLitterParam AND fuelConsumption.driveId = :driveIdParam")
+    Collection<FuelConsumption> findDuplicates(@Param("fuelTypeParam") String fuelTypeParam, @Param("littersParam") BigDecimal littersParam, @Param("transactionDateParam") Date transactionDateParam, @Param("pricePerLitterParam") BigDecimal pricePerLitterParam, @Param("driveIdParam") String driveIdParam);
 
 }

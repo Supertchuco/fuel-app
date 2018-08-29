@@ -1,23 +1,22 @@
 package com.gas.fuelapp.filter;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-
+import com.gas.fuelapp.exception.InvalidAccessException;
 import com.gas.fuelapp.service.DriverService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import java.io.*;
+
 
 @Component
+@Slf4j
 public class RequestFilter implements Filter {
 
 
@@ -33,20 +32,19 @@ public class RequestFilter implements Filter {
         ResettableStreamHttpServletRequest wrappedRequest = new ResettableStreamHttpServletRequest(
                 (HttpServletRequest) request);
         String body = IOUtils.toString(wrappedRequest.getReader());
-
-        System.out.println(body);
+        log.info("Body Request: {}", body);
         validateDriverAccess(body);
-
         wrappedRequest.resetInputStream();
         chain.doFilter(wrappedRequest, response);
 
     }
 
-    private void validateDriverAccess(String bodyRequest){
+    private void validateDriverAccess(String bodyRequest) {
         JSONObject jsonObj = new JSONObject(bodyRequest);
         String driverId = jsonObj.getString("Driver Id");
-        if(!driverService.existDriverIdOnDatabase(driverId)){
-            System.out.println("não existe");
+        if (StringUtils.isBlank(driverId) || !driverService.existDriverIdOnDatabase(driverId)) {
+            log.error("Invalid access for Driver id: {}", driverId);
+            throw new InvalidAccessException(String.format("This Driver Id [%s] does not have access", driverId));
         }
     }
 
