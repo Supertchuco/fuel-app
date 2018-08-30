@@ -1,8 +1,6 @@
 # fuel-app
 
-
-
-This is an API to products management, I developed this API using Intellij IDE and these technologies:
+This is an API to fuel management, I developed this API using Intellij IDE and these technologies:
 
     Springboot;
     Gradle;
@@ -10,25 +8,19 @@ This is an API to products management, I developed this API using Intellij IDE a
     H2 (memory database);
     Swagger;
     Lombok;
-    Actuator;
     Spring rest.
 
 This API allow these operations:
 
-    Product:
-        Insert a product "http://localhost:8090/productManagement/api/product/save" (you need to send a payload);
-        Delete a product "http://localhost:8090/productManagement/api/product/deleteByName/{productName}";
-        List all products "http://localhost:8090/productManagement/api/product/findAll";
-        List a specific product by name "http://localhost:8090/productManagement/api/product/findByName/{productName}";
-        Modify a product "http://localhost:8090/productManagement/api/product/editByName/{productName}" (you need to send a payload).
-    Image:
-        Insert a image "http://localhost:8090/productManagement/api/image/save" (you need to send a payload);
-        Delete a image "http://localhost:8090/productManagement/api/image/deleteByType/{imageType}";
-        List all images "http://localhost:8090/productManagement/api/image/findAll";
-        List a specific image by type "http://localhost:8090/productManagement/api/image/findByType/{imageType}";
-        Modify a image "http://localhost:8090/productManagement/api/image/editByType/{imageType}" (you need to send a payload).
-
-You can check the all rest operations and the payloads through Swagger, to do it you need to running the application and access this url "http://localhost:8090/productManagement/api/swagger-ui.html"
+	Insert new consumption(s): http://localhost:8090/fuel-app/api/fuelConsumption/saveFuelConsumptions
+	Report by month and year: http://localhost:8090/fuel-app/api/fuelConsumption/consumeByMonthAndYear
+	Report by consume grouped by month and year: http://localhost:8090/fuel-app/api/fuelConsumption/consumeGroupedByMonthAndYear
+	Report months statistics by year: http://localhost:8090/fuel-app/api/fuelConsumption/monthlyStatisticsByYear
+	
+Important, on all reporters services if you don't send the year parameter on payload, the api will assume the current year like parameter.
+All requests are post operations and need a valid driver id to has access for the operations, currently when you start the application the class DatabaseLoader will insert some data on database, including a driver data (please check the DatabaseLoader class for more details, if it was deployed on production environment you would need to remove this class).
+	
+You can check the all rest operations and the payloads through Swagger, to do it you need to running the application and access this url "http://localhost:8090/fuel-app/api/swagger-ui.html"
 
 This project have these kind of tests:
 
@@ -42,14 +34,13 @@ Step to running the project:
     Intellij IDE:
         Import the project like Gradlew Project;
         Mark the check box Enable Annotation Processing in Settings->Build->Execution->Deployment->Compiler->Annotation Processor
-        Run the major class ProductManagementApplication.
+        Run the major class FuelAppApplication.java.
 
     Without an IDE:
         Execute the command "gradlew clean build" inside the project in a cmd prompt;
-        Execute command "java -jar Jar_Name.jar" in "product-management\build\libs" directory.
+        Execute command "java -jar fuel-app.jar" in "fuel-app\build\libs" directory.
 
-In both of cases you can check if the application is running accessing this url "http://localhost:8090/productManagement/api/health" (actuator feature);
+Important Note: This project use a memory database (Spring H2) but also it is configured to use Oracle database, to use it you just need to configure the connection in production profile (application-prod.properties).
 
-Important Note: This project is configured to create the database structure every time that the application is started with specified data (you can check it in DatabaseLoader class), if you want to disable it, you need to comment (#) or delete this line "spring.jpa.hibernate.ddl-auto=create" in application.properties. This project use a memory database (Spring H2) but also it is configured to use Oracle database, to use it you just need to configure the connection in application.properties (there is my configuration commented in application.properties, you can follow it like an example).
-
-If you have questions, please feel free to contact me.
+Also, this project has a dockerfile, I mean, you can run this API in a docker container, to do it, you need just build the image (docker build -t fuel-app . ) and create the container (docker run -p 8090:8090 -d fuel-app)
+To finish it, I need to say that I didn't have time to implement the feature that allow the app to read files. If you have more questions, please feel free to contact me.

@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class FuelAppApplicationIntegrationTests {
 
-    private static final String requestEndpointBase = "http://localhost:8090/fuelConsumption";
+    private static final String requestEndpointBase = "http://localhost:8090/fuel-app/api/fuelConsumption";
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -110,7 +110,7 @@ public class FuelAppApplicationIntegrationTests {
     public void shouldReturn200WhenGenerateConsumeGroupedByMonthReport() {
         String payload = readJSON("request/generateConsumeByConsumeGroupedByMonthReportSuccess.json");
         HttpEntity<String> entity = new HttpEntity<String>(payload, buildHttpHeaders());
-        ResponseEntity<String> response = testRestTemplate.exchange(requestEndpointBase + "/consumeGroupedByMonth", HttpMethod.POST, entity, String.class);
+        ResponseEntity<String> response = testRestTemplate.exchange(requestEndpointBase + "/consumeGroupedByMonthAndYear", HttpMethod.POST, entity, String.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -118,7 +118,7 @@ public class FuelAppApplicationIntegrationTests {
     public void shouldReturn200WhenGenerateConsumeGroupedByMonthReportWithoutYear() {
         String payload = readJSON("request/generateConsumeByConsumeGroupedByMonthReportSuccessWithoutYear.json");
         HttpEntity<String> entity = new HttpEntity<String>(payload, buildHttpHeaders());
-        ResponseEntity<String> response = testRestTemplate.exchange(requestEndpointBase + "/consumeGroupedByMonth", HttpMethod.POST, entity, String.class);
+        ResponseEntity<String> response = testRestTemplate.exchange(requestEndpointBase + "/consumeGroupedByMonthAndYear", HttpMethod.POST, entity, String.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -126,7 +126,7 @@ public class FuelAppApplicationIntegrationTests {
     public void shouldReturn200WhenGenerateMonthlyStatisticsReport() {
         String payload = readJSON("request/generateConsumeByMonthlyStatisticsReportSuccess.json");
         HttpEntity<String> entity = new HttpEntity<String>(payload, buildHttpHeaders());
-        ResponseEntity<String> response = testRestTemplate.exchange(requestEndpointBase + "/consumeGroupedByMonth", HttpMethod.POST, entity, String.class);
+        ResponseEntity<String> response = testRestTemplate.exchange(requestEndpointBase + "/monthlyStatisticsByYear", HttpMethod.POST, entity, String.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -134,7 +134,7 @@ public class FuelAppApplicationIntegrationTests {
     public void shouldReturn200WhenGenerateMonthlyStatisticsReportWithOutYear() {
         String payload = readJSON("request/generateConsumeByMonthlyStatisticsReportSuccessWithoutYear.json");
         HttpEntity<String> entity = new HttpEntity<String>(payload, buildHttpHeaders());
-        ResponseEntity<String> response = testRestTemplate.exchange(requestEndpointBase + "/consumeGroupedByMonth", HttpMethod.POST, entity, String.class);
+        ResponseEntity<String> response = testRestTemplate.exchange(requestEndpointBase + "/monthlyStatisticsByYear", HttpMethod.POST, entity, String.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }

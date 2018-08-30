@@ -83,7 +83,7 @@ public class FuelService {
     public YearStatisticReportVO fuelMonthlyStatisticsConsumptionReportByMonthAndYear(final BasicPayloadVO payload) {
         try {
             Integer year = (Objects.isNull(payload.getYear())) ? Calendar.getInstance().get(Calendar.YEAR) : payload.getYear();
-            YearStatisticReportVO yearStatisticReportVO = buildMonthlyStatisticReport(fuelConsumptionRepository.getMonthlyFuelConsumptionReportStatisticsByYear(payload.getYear()), year);
+            YearStatisticReportVO yearStatisticReportVO = buildMonthlyStatisticReport(fuelConsumptionRepository.getMonthlyFuelConsumptionReportStatisticsByYear(year), year);
             log.info("Fuel Monthly Statistics Consumption Report By Month And Year Report Generate with Success");
             return yearStatisticReportVO;
         } catch (Exception e) {
